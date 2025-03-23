@@ -1,0 +1,35 @@
+{% from 'opmaak.jinja' import komma %}
+
+{% set zon = states('sun.sun') %}
+
+{% set maanfase = states('sensor.moon') %}
+
+{% set maanfase_mapping = {
+    'new_moon': '🌑',
+    'waxing_crescent': '🌒',
+    'first_quarter': '🌓',
+    'waxing_gibbous': '🌔',
+    'full_moon': '🌕',
+    'waning_gibbous': '🌖',
+    'last_quarter': '🌗',
+    'waning_crescent': '🌘'
+} %}
+
+{% set maan = maanfase_mapping.get(maanfase, '🌑') %}  {# Standaard emoji voor onbekende fase #}
+
+{% set regen =
+ {
+  "huidig_neerslag": states('sensor.easyweatherpro_v5_1_1_rain_rate') | float(0) ,
+  "hum": states('sensor.gemiddelde_binnenluchtvochtigheid') | float(0)
+  }
+%}
+
+{% if regen.huidig_neerslag > 0 %}
+    {% set emoji = '🌧️' %}
+{% endif %}
+
+{% if zon != 'below_horizon' %}
+{% set maan = '' %}
+{% endif %}
+{{ maan }}
+{{ emoji }} Huidige neerslag: {{ komma(regen.huidig_neerslag) }} mm/h {{ emoji }}
