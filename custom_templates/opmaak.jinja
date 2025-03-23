@@ -1,0 +1,27 @@
+{% macro komma(getal) %}
+{{- getal | replace('unavailable','0.0') | replace('.',',') }}
+{% endmacro %}
+
+{% macro uurmin(tijd) %}
+{{- ((tijd | int)/60)  | round(0, 'floor') }}:{{ '{:0>2d}'.format(((tijd | int) | round(0))%60) }} uur
+{% endmacro %}
+
+{% macro waaris(persoon) %}
+{% set person = 'person.' ~ persoon %}
+{% set direction = 'sensor.thuis_' ~ persoon ~ '_direction_of_travel' %}
+{%- if is_state(person, 'home') %}
+Thuis
+{%- elif is_state(person, 'not_home') %}
+Niet thuis
+{%- else %}
+{{- states(person) }}
+{%- endif %}
+{%- if states(direction) == 'arrived' or states(direction) == 'stationary' %}
+{%- else %}
+({{- states(direction) }})
+{% endif %}
+{% endmacro %}
+
+{% macro reistijd(vervoersmiddel, snelheid) %}
+{{ vervoersmiddel }} {{ snelheid }}
+{% endmacro %}
