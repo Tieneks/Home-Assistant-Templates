@@ -1,0 +1,47 @@
+{% from 'opmaak.jinja' import komma %}
+
+{% set huidige_prijs = states('input_number.benzine_huidige_prijs') %}
+{% set huidige_prijs_datum_updated = states('sensor.benzine_datum') %}
+{% set huidige_prijs_datum_changed = as_timestamp(states('input_datetime.benzine_huidige_prijs_datum')) | timestamp_custom('%d-%m-%Y %H:%M:%S') %}
+{% set hoogste_prijs = states('input_number.benzine_hoogste_prijs') %}
+{% set hoogste_prijs_datum = states('input_text.benzine_hoogste_prijs_datum') %}
+{% set laagste_prijs = states('input_number.benzine_laagste_prijs') %}
+{% set laagste_prijs_datum = states('input_text.benzine_laagste_prijs_datum') %}
+{% set locatie = states('sensor.benzine_goedkoopste_locatie') | replace('Stad','<span style="color:#00ffaa;"><b>Stad</b></span>') %}
+
+{# Dit is nog een test #}
+{% set verschil = states('input_number.benzine_huidige_prijs_verschil') | float('-') | round(4) %}
+{% if verschil < 0 %}
+{% set kleur_verschil = '#00ffaa' %}
+{% set updown = '🔻' %}
+{% elif verschil > 0 %}
+{% set kleur_verschil = '#ff0000' %}
+{% set plus = '+' %}
+{% set updown = '🔺' %}
+{% else %}
+{% set kleur_verschil = '#ffffff' %}
+{% endif %}
+
+
+{% if huidige_prijs == laagste_prijs %}
+{% set kleur = '#00ffaa' %}
+{% elif huidige_prijs == hoogste_prijs %}
+{% set kleur = '#ff0000' %}
+{% else %}
+{% set kleur = '#ffffff' %}
+{% endif %}
+
+
+<div style="text-align:end">
+Laatste update: {{ huidige_prijs_datum_updated }}<br />
+Laatste wijziging: {{ huidige_prijs_datum_changed }}<br />
+Huidige laagste benzineprijs:<br /> <font color={{ kleur }}> <b>{{ komma(huidige_prijs) }}€</b></font> <font color={{ kleur_verschil }}><i>({{ plus }}{{ komma('{:.3f}'.format(verschil)) }}€)</i></font>{{ updown }}
+<br />
+Locatie:  {{ locatie }}
+<br />
+Max.: {{ komma(hoogste_prijs) }}€ ({{ hoogste_prijs_datum }})
+<br />
+Min.: {{ komma(laagste_prijs) }}€ ({{ laagste_prijs_datum }})
+</div>
+
+<ha-icon icon='mdi:window-open-variant'/>
