@@ -1,0 +1,27 @@
+{% macro golfer(name, tour) %}
+{% set sensor = 'sensor.scores_golf_' + tour + '_' + name %}
+
+{% if state_attr(sensor, 'team_shots_on_target') == 0 %}
+{% else %}
+Naam: {{ '\t' }}{{ state_attr(sensor, 'team_name') | upper }}<br />
+Hole: {{ '\t' }}{% if state_attr(sensor, 'team_shots_on_target') == 18 %}ðŸ”ž{% else %}{{ state_attr(sensor, 'team_shots_on_target') }}{% endif %} 
+Score: {% if (state_attr(sensor, 'team_score') | replace('E','0') | int) < 0 %}<span style='background-color:green; color:black;'>
+{% elif (state_attr(sensor, 'team_score') | replace('E','0') | int) > 0 %}<span style='background-color:red; color:white;'>
+{% else %}<span>
+{% endif %}{{ state_attr(sensor, 'team_score') }}</span> ({{ state_attr(sensor, 'team_total_shots') | int }})<br />
+Stand: 
+{%- if is_state(sensor, 'PRE') %}-
+{%- else %}{{ '\t' }}{{ state_attr(sensor, 'team_rank') }}
+{%- endif %}<br />
+{%- if state_attr(sensor, 'date') > states('sensor.date_time_iso') %}
+Starts {{ '\t' }}{{ state_attr(sensor, 'kickoff_in') }}<br />
+{% endif %}
+--------<br />
+{% endif %}
+{% endmacro %}
+
+{% macro ranglijst(value) %}
+{{ value | replace('T1','1') | replace('T2','2') | replace('T3','3') | replace('T4','4') | replace('T5','5')
+		 | replace('T6','6') | replace('T7','7') | replace('T8','8') | replace('T9','9') | replace('T10','10')
+		 | replace(',','<br />') | replace('1.','<b>1.') | replace(')',')</b>') }}
+{% endmacro %}
