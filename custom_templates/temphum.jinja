@@ -1,0 +1,7 @@
+{% macro sensor_line(temp,hum) %}
+ 
+{{- states(temp) | float(default=states('sensor.gemiddelde_binnentemperatuur')) | replace('.',',') -}}⁰C 
+{{ '\t' }}-{{ '\t' }}
+{{- states(hum) | float(default=states('sensor.gemiddelde_binnenluchtvochtigheid')) | replace('.',',') -}}% 
+<br />
+{% endmacro %}
