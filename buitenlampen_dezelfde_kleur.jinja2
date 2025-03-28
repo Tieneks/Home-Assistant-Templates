@@ -1,0 +1,38 @@
+{# 
+    'input_text.dag_vandaag_kleuren' bevat een waarde (bijv. Groen;Verde;Berde;Green;Krien;00FF00). Controleer met behulp van een reguliere expressie of de lampen in de tuin dezelfde kleur hebben.
+    Als een lamp uitstaat, wordt dat gezien als dezelfde kleur. Hierdoor ontstaat een verwachte waarde van '1111', waardoor een voorwaarde ingesteld kan worden voor een knop om lampen te kleuren.
+    De code is nog niet helemaal opgeschoond en bevat wat overbodige code.
+    Kleurcodes worden omgezet worden van rgb naar hex.
+#}
+
+{% set kleuren = states('input_text.dag_vandaag_kleuren') %}
+{%- set pattern = state_attr('input_text.dag_vandaag_kleuren', 'pattern') %}
+{%- set kleur_hex = (kleuren | regex_findall_index(pattern))[5] | lower %}
+
+{%- set rgb_color = [
+    int(kleur_hex[0:2], 16),
+    int(kleur_hex[2:4], 16),
+    int(kleur_hex[4:6], 16)
+] %}
+
+{%- set hue = (atan2(rgb_color[1] - rgb_color[2], rgb_color[0] - rgb_color[1]) * 180 / 3.14159 + 360) % 360 %}
+{%- set saturation = (max(rgb_color) - min(rgb_color)) / max(rgb_color) * 100 if max(rgb_color) > 0 else 0 %}
+
+{%- set specifieke_lampen = [
+    'light.achtertuin_grondlampen',
+    'light.achtertuin_schutting',
+    'light.achtertuin_schuur',
+    'light.voortuin_voordeur'
+] %}
+
+{%- set kleur_teller = 0 %}
+
+{%- for lamp in specifieke_lampen %}
+  {%- set lamp_hs_color = state_attr(lamp, 'hs_color') %}
+  {%- set lamp_state = states(lamp) %}
+  {%- if lamp_state == 'off' %}
+    {{- 1 -}}
+  {%- elif lamp_hs_color is not none and (lamp_hs_color[0] == hue) and (lamp_hs_color[1] == saturation) %}
+    {{- 1 -}}
+  {%- endif %}
+{%- endfor %}
