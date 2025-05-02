@@ -1,0 +1,46 @@
+variables:
+  element: "{{ states('sensor.element').replace(\"'\", '\"') | from_json }}"
+  symbool: "{{ element.symbool }}"
+  titel: Wat is het atoomnummer van {{ element.naam | lower }}?
+  tekst: >-
+    {{ element.naam }} is een {{ element.kleur }} {{ element.categorie }} en
+    heeft als symbool {{ symbool }}.
+  range_minus: "{{ range(1, 11) | random }}"
+  range_plus: "{{ range(1, 11) | random }}"
+  range1: "{{ element.atoomnummer - range_minus }}"
+  range2: "{{ element.atoomnummer + range_plus }}"
+  range_min: "{{ range1 if range1 > 0 else (range1 | abs) }}"
+  range_max: "{{ range2 if range2 < 119 else 119 }}"
+  willekeurig1: "{{ range(range_min, range_max) | random }}"
+  willekeurig2: "{{ range(range_min, range_max) | random }}"
+  extra_nummer: "{{ range(range_min, range_max) | random }}"
+  willekeurige_atoomnummers: "{{ [element.atoomnummer, willekeurig1, willekeurig2] | unique | sort }}"
+  unieke_atoomnummers: "{{ willekeurige_atoomnummers | length }}"
+  atoomnummers: |-
+    {%- if unieke_atoomnummers < 3 -%}
+     {{ (willekeurige_atoomnummers + [extra_nummer]) | unique | list | sort }}
+    {%- else -%}
+     {{ willekeurige_atoomnummers }}
+    {%- endif -%}
+  links: "{{ atoomnummers[0] }}"
+  midden: "{{ atoomnummers[1] }}"
+  rechts: "{{ atoomnummers[2] }}"
+  ELEMENT_LINKS: |-
+    {%- if links == element.atoomnummer -%}
+     {%- set ELEMENT_LINKS = 'CORRECT_ELEMENT' -%}
+    {%- else -%}
+     {%- set ELEMENT_LINKS = 'WRONG_ELEMENT' -%}
+    {%- endif -%} {{ ELEMENT_LINKS }}
+  ELEMENT_MIDDEN: |-
+    {%- if midden == element.atoomnummer -%}
+     {%- set ELEMENT_MIDDEN = 'CORRECT_ELEMENT' -%}
+    {%- else -%}
+     {%- set ELEMENT_MIDDEN = 'WRONG_ELEMENT' -%}
+    {%- endif -%} {{ ELEMENT_MIDDEN }}
+  ELEMENT_RECHTS: |-
+    {%- if rechts == element.atoomnummer -%}
+     {%- set ELEMENT_RECHTS = 'CORRECT_ELEMENT' -%}
+    {%- else -%}
+     {%- set ELEMENT_RECHTS = 'WRONG_ELEMENT' -%}
+    {%- endif -%} {{ ELEMENT_RECHTS }}
+alias: Definieer variabelen
