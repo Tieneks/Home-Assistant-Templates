@@ -1,0 +1,120 @@
+- platform: template
+  sensors:
+    weekdag_nederlands:
+      friendly_name: "Weekdag (Nederlands)"
+      unique_id: fb8ec047-943f-48e4-b336-1c35e96e5e3g
+      value_template: >-
+        {% set days = ['maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag'] %}
+        {% set month = ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'] %}
+        {{ days[now().weekday()] }} {{ now().day }} {{ month[now().month - 1] }}
+      attribute_templates:
+        eergisteren: >-
+          {% set days = ['maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag'] %}
+          {{ days[(now().weekday() - 2) % 7] }}
+        gisteren: >-
+          {% set days = ['maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag'] %}
+          {{ days[(now().weekday() - 1) % 7] }}
+        vandaag: >-
+          {% set days = ['maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag'] %} 
+          {{ days[now().weekday()] }}
+        morgen: >-
+          {% set days = ['maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag'] %}
+          {{ days[(now().weekday() + 1) % 7] }}
+        overmorgen: >-
+          {% set days = ['maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag'] %}
+          {{ days[(now().weekday() + 2) % 7] }}
+        drie_dagen_van_nu: >-
+          {% set days = ['maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag'] %}
+          {{ days[(now().weekday() + 3) % 7] }}
+        vier_dagen_van_nu: >-
+          {% set days = ['maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag'] %}
+          {{ days[(now().weekday() + 4) % 7] }}
+        vijf_dagen_van_nu: >-
+          {% set days = ['maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag'] %}
+          {{ days[(now().weekday() + 5) % 7] }}
+        zes_dagen_van_nu: >-
+          {% set days = ['maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag'] %}
+          {{ days[(now().weekday() + 6) % 7] }}
+        zeven_dagen_van_nu: >-
+          {% set days = ['maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag', 'zondag'] %}
+          {{ days[(now().weekday() + 7) % 7] }}
+- platform: template
+  sensors:
+    weekdag_spaans:
+      friendly_name: "Weekdag (Spaans)"
+      unique_id: 74d36b46-d92c-40e1-ad79-3cae926a48d0
+      value_template: >-
+        {% set days = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'] %}
+        {% set month = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'] %}
+        {{ days[now().weekday()] }} {{ now().day }} de {{ month[now().month - 1] }}
+      attribute_templates:
+        eergisteren: >-
+          {% set days = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'] %}
+          {{ days[(now().weekday() - 2) % 7] }}
+        gisteren: >-
+          {% set days = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'] %}
+          {{ days[(now().weekday() - 1) % 7] }}
+        vandaag: >-
+          {% set days = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'] %} 
+          {{ days[now().weekday()] }}
+        morgen: >-
+          {% set days = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'] %}
+          {{ days[(now().weekday() + 1) % 7] }}
+        overmorgen: >-
+          {% set days = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'] %}
+          {{ days[(now().weekday() + 2) % 7] }}
+        drie_dagen_van_nu: >-
+          {% set days = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'] %}
+          {{ days[(now().weekday() + 3) % 7] }}
+        vier_dagen_van_nu: >-
+          {% set days = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'] %}
+          {{ days[(now().weekday() + 4) % 7] }}
+        vijf_dagen_van_nu: >-
+          {% set days = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'] %}
+          {{ days[(now().weekday() + 5) % 7] }}
+        zes_dagen_van_nu: >-
+          {% set days = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'] %}
+          {{ days[(now().weekday() + 6) % 7] }}
+        zeven_dagen_van_nu: >-
+          {% set days = ['lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado', 'domingo'] %}
+          {{ days[(now().weekday() + 7) % 7] }}
+- platform: template
+  sensors:
+    weekdag_fries:
+      friendly_name: "Weekdag (Fries)"
+      unique_id: 9e9a2a90-377d-4887-8a7d-3a5bf383c6aa
+      value_template: >-
+        {% set days = ['moandei', 'tiisdei', 'woansdei', 'tongersdei', 'freed', 'saterdei', 'snein'] %}
+        {% set month = ['jannewaris', 'febrewaris', 'maart', 'april', 'maaie', 'juny', 'july', 'augustus', 'septimber', 'oktober', 'novimber', 'desimber'] %}
+        {{ days[now().weekday()] }} {{ now().day }} {{ month[now().month - 1] }}
+      attribute_templates:
+        eergisteren: >-
+          {% set days = ['moandei', 'tiisdei', 'woansdei', 'tongersdei', 'freed', 'saterdei', 'snein'] %}
+          {{ days[(now().weekday() - 2) % 7] }}
+        gisteren: >-
+          {% set days = ['moandei', 'tiisdei', 'woansdei', 'tongersdei', 'freed', 'saterdei', 'snein'] %}
+          {{ days[(now().weekday() - 1) % 7] }}
+        vandaag: >-
+          {% set days = ['moandei', 'tiisdei', 'woansdei', 'tongersdei', 'freed', 'saterdei', 'snein'] %} 
+          {{ days[now().weekday()] }}
+        morgen: >-
+          {% set days = ['moandei', 'tiisdei', 'woansdei', 'tongersdei', 'freed', 'saterdei', 'snein'] %}
+          {{ days[(now().weekday() + 1) % 7] }}
+        overmorgen: >-
+          {% set days = ['moandei', 'tiisdei', 'woansdei', 'tongersdei', 'freed', 'saterdei', 'snein'] %}
+          {{ days[(now().weekday() + 2) % 7] }}
+        drie_dagen_van_nu: >-
+          {% set days = ['moandei', 'tiisdei', 'woansdei', 'tongersdei', 'freed', 'saterdei', 'snein'] %}
+          {{ days[(now().weekday() + 3) % 7] }}
+        vier_dagen_van_nu: >-
+          {% set days = ['moandei', 'tiisdei', 'woansdei', 'tongersdei', 'freed', 'saterdei', 'snein'] %}
+          {{ days[(now().weekday() + 4) % 7] }}
+        vijf_dagen_van_nu: >-
+          {% set days = ['moandei', 'tiisdei', 'woansdei', 'tongersdei', 'freed', 'saterdei', 'snein'] %}
+          {{ days[(now().weekday() + 5) % 7] }}
+        zes_dagen_van_nu: >-
+          {% set days = ['moandei', 'tiisdei', 'woansdei', 'tongersdei', 'freed', 'saterdei', 'snein'] %}
+          {{ days[(now().weekday() + 6) % 7] }}
+        zeven_dagen_van_nu: >-
+          {% set days = ['moandei', 'tiisdei', 'woansdei', 'tongersdei', 'freed', 'saterdei', 'snein'] %}
+          {{ days[(now().weekday() + 7) % 7] }}        
