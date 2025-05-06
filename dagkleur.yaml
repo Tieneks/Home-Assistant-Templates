@@ -1,0 +1,153 @@
+- platform: template
+  sensors:
+    dagkleur:
+      friendly_name: "Kleur van de dag"
+      unique_id: 4636d966-b9ef-4fa3-af89-f3515b4305ec
+      value_template: >-
+        {%- set kleuren = 
+         {
+          1: 'geel',
+          2: 'paars',
+          3: 'oranje',
+          4: 'rood',
+          5: 'groen',
+          6: 'roze',
+          7: 'blauw'
+         }
+        -%}
+        {%- set dag = now().isoweekday() -%}
+        {{- kleuren[dag] -}}
+      attribute_templates:
+          vandaag_kleur_nederlands: >
+            {%- set dag = now().isoweekday() -%}
+            {%- set kleuren_nederlands = 
+               {
+                1: 'geel',
+                2: 'paars',
+                3: 'oranje',
+                4: 'rood',
+                5: 'groen',
+                6: 'roze',
+                7: 'blauw'
+               }
+            -%}
+            {{- kleuren_nederlands[dag] -}}
+          vandaag_kleur_engels: >
+            {%- set dag = now().isoweekday() -%}
+            {%- set kleuren_engels = 
+               {
+                1: 'yellow',
+                2: 'purple',
+                3: 'orange',
+                4: 'red',
+                5: 'green',
+                6: 'pink',
+                7: 'blue'
+               }
+            -%}
+            {{- kleuren_engels[dag] -}}
+          vandaag_kleur_spaans: >
+            {%- set dag = now().isoweekday() -%}
+            {%- set kleuren_spaans = 
+               {
+                1: 'amarillo',
+                2: 'púrpura',
+                3: 'naranja',
+                4: 'rojo',
+                5: 'verde',
+                6: 'rosa',
+                7: 'azul'
+               }
+            -%}
+            {{- kleuren_spaans[dag] -}}  
+          vandaag_kleur_fries: >
+            {%- set dag = now().isoweekday() -%}
+            {%- set kleuren_fries = 
+               {
+                1: 'giel',
+                2: 'pears',
+                3: 'oranje',
+                4: 'read',
+                5: 'grien',
+                6: 'roze',
+                7: 'blau'
+               }
+            -%}
+            {{- kleuren_fries[dag] -}}
+          vandaag_kleur_hex: >
+            {%- set dag = now().isoweekday() -%}
+            {%- set kleuren_hex = 
+               {
+                1: 'FFFF00',
+                2: 'BF00E6',
+                3: 'EA4C14',
+                4: 'FF0000',
+                5: '00FF00',
+                6: 'E600BF',
+                7: '0000FF'
+               }
+            -%}
+            {{- kleuren_hex[dag] -}}
+          vandaag_kleur_rgb: >
+            {%- set dag = now().isoweekday() -%}
+            {%- set kleuren_rgb = 
+               {
+                1: '255,255,0',
+                2: '191,0,230',
+                3: '234,76,20',
+                4: '255,0,0',
+                5: '0,255,0',
+                6: '230,0,191',
+                7: '0,0,255'
+               }
+            -%}
+            {{- kleuren_rgb[dag] -}}
+            
+          maandag_kleur_nederlands: 'geel'
+          maandag_kleur_engels: 'yellow'
+          maandag_kleur_spaans: 'amarillo'
+          maandag_kleur_fries: 'giel'
+          maandag_kleur_hex: 'FFFF00'
+          maandag_kleur_rgb: '255,255,0'
+          
+          dinsdag_kleur_nederlands: 'paars'
+          dinsdag_kleur_engels: 'purple'
+          dinsdag_kleur_spaans: 'púrpura'
+          dinsdag_kleur_fries: 'pears'
+          dinsdag_kleur_hex: 'BF00E6'
+          dinsdag_kleur_rgb: '191,0,230'
+          
+          woensdag_kleur_nederlands: 'oranje'
+          woensdag_kleur_engels: 'orange'
+          woensdag_kleur_spaans: 'naranja'
+          woensdag_kleur_fries: 'oranje'
+          woensdag_kleur_hex: 'EA4C14'
+          woensdag_kleur_rgb: '234,76,20'
+          
+          donderdag_kleur_nederlands: 'rood'
+          donderdag_kleur_engels: 'red'
+          donderdag_kleur_spaans: 'rojo'
+          donderdag_kleur_fries: 'read'
+          donderdag_kleur_hex: 'FF0000'
+          donderdag_kleur_rgb: '255,0,0'
+          
+          vrijdag_kleur_nederlands: 'groen'
+          vrijdag_kleur_engels: 'green'
+          vrijdag_kleur_spaans: 'verde'
+          vrijdag_kleur_fries: 'grien'
+          vrijdag_kleur_hex: '00FF00'
+          vrijdag_kleur_rgb: '0,255,0'
+          
+          zaterdag_kleur_nederlands: 'roze'
+          zaterdag_kleur_engels: 'pink'
+          zaterdag_kleur_spaans: 'rosa'
+          zaterdag_kleur_fries: 'roze'
+          zaterdag_kleur_hex: 'E600BF'
+          zaterdag_kleur_rgb: '230,0,191'
+          
+          zondag_kleur_nederlands: 'blauw'
+          zondag_kleur_engels: 'blue'
+          zondag_kleur_spaans: 'azul'
+          zondag_kleur_fries: 'blau'
+          zondag_kleur_hex: '0000FF'
+          zondag_kleur_rgb: '0,0,255'
