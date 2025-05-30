@@ -1,0 +1,1 @@
+{{ ((now().replace(day=28) + timedelta(days=4)).replace(day=1).replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=1)) | as_timestamp  | timestamp_custom('%d') | int }}
