@@ -1,5 +1,9 @@
 {% macro komma(getal) %}
-{{- getal | replace('unavailable','0.0') | replace('.',',') }}
+{{- getal | replace('unavailable','0.0') | replace('.',',') -}}
+{% endmacro %}
+
+{% macro punt(getal) %}
+{{ '{:,.0f}'.format(getal | int(-1)).replace(',', '.') -}}
 {% endmacro %}
 
 {% macro uurmin(tijd) %}
@@ -7,11 +11,11 @@
 {% endmacro %}
 
 {% macro waaris(persoon) %}
-{% set person = 'person.' ~ persoon %}
-{% set direction = 'sensor.thuis_' ~ persoon ~ '_direction_of_travel' %}
-{%- if is_state(person, 'home') %}
+{%- set person = 'person.' ~ persoon -%}
+{%- set direction = 'sensor.thuis_' ~ persoon ~ '_direction_of_travel' -%}
+{%- if is_state(person, 'home') -%}
 Thuis
-{%- elif is_state(person, 'not_home') %}
+{%- elif is_state(person, 'not_home') -%}
 Niet thuis
 {%- else %}
 {{- states(person) }}
@@ -19,9 +23,13 @@ Niet thuis
 {%- if states(direction) == 'arrived' or states(direction) == 'stationary' %}
 {%- else %}
 ({{- states(direction) }})
-{% endif %}
+{%- endif -%}
 {% endmacro %}
 
 {% macro reistijd(vervoersmiddel, snelheid) %}
 {{ vervoersmiddel }} {{ snelheid }}
+{% endmacro %}
+
+{% macro benzineprijs(prijs) %}
+{{ komma(prijs) | regex_replace('(\d),(\d{2})(\d)','\\1,\\2<sup>\\3</sup>') }}€
 {% endmacro %}
