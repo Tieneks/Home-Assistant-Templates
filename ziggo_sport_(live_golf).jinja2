@@ -1,10 +1,11 @@
 <p style="text-align:start">
-{%- set live_programs = namespace(programs=[], current_channel=None) -%}
+{%- set live_programs = namespace(programs=[], current_channel=None, preview_shown=false) -%}
 {%- for i in range(1, 7) -%}
   {%- set sensor_name = 'sensor.ziggosport' ~ i ~ '_epg' -%}
   {%- if state_attr(sensor_name, 'programming') is not none -%}
     {%- for program in state_attr(sensor_name, 'programming') -%}
-      {%- if program.live and program.sportName == 'golf' -%}
+      {%- set is_preview = 'voorbeschouwing' in (program.description | lower) -%}
+{%- if (program.live and program.sportName == 'golf') or (is_preview and program.sportName == 'golf' and not live_programs.preview_shown) -%}
         {%- set channel = '<b>' ~ state_attr(sensor_name, 'channel') ~ '</b>' -%}
         {%- set date = program.dateStart | as_timestamp | timestamp_custom('%-d') | int -%}
         {%- set start_time = program.dateStart | as_timestamp | timestamp_custom('%H:%M') -%}
@@ -12,20 +13,34 @@
        {%- set is_tomorrow = (now() | as_timestamp | timestamp_custom('%-d') | int) <  date -%}
        {%- set is_yesterday = (now() | as_timestamp | timestamp_custom('%-d') | int) >  date -%}
 
-
-        {# Controleer of "TGL", "PGA" of "European Tour" in de title of description staat #}
-        {%- if 'TGL' in program.title or 'TGL' in program.description -%}
-          {%- set title_style = '<span style="color: #99FFFF;"><b>' ~ program.title ~ '</b></span>' -%}
-        {%- elif 'PGA' in program.title or 'PGA' in program.description -%}
-          {%- set title_style = '<span style="color: #33FBFF;"><b>' ~ program.title ~ '</b></span>' -%}
-        {%- elif 'European Tour' in program.title or 'European Tour' in program.description -%}
-          {%- set title_style = '<span style="color: green;"><b>' ~ program.title ~ '</b></span>' -%}
-        {%- else -%}
-          {%- set title_style = '<b>' ~ program.title ~ '</b>' -%}
-        {%- endif -%}      
+{# Controleer of "TGL", "PGA" of "European Tour" in de title of description staat #}
+{%- if 'TGL' in program.title or 'TGL' in program.description -%}
+  {%- set title_style = '<span style="background-color: white; color: #99FFFF;"><b>' ~ program.title ~ '</b></span>' -%}
+{%- elif 'Masters' in program.title or 'Masters' in program.description -%}
+  {%- set title_style = '<span style="background-color: white; color: #228B22;"><b>' ~ program.title ~ ' 🌿</b></span>' -%}
+{%- elif 'U.S. Open' in program.title or 'U.S. Open' in program.description -%}
+  {%- set title_style = '<span style="background-color: white; color: #1E90FF;"><b>' ~ program.title ~ ' 🏌️‍♂️</b></span>' -%}
+{%- elif 'The Open' in program.title or 'The Open Championship' in program.description -%}
+  {%- set title_style = '<span style="background-color: white; color: #DAA520;"><b>' ~ program.title ~ ' 🏆</b></span>' -%}
+{%- elif 'PGA Championship' in program.title or 'PGA Championship' in program.description -%}
+  {%- set title_style = '<span style="background-color: white; color: #8A2BE2;"><b>' ~ program.title ~ ' ⛳</b></span>' -%}
+{%- elif 'KLM Open' in program.title or 'KLM Open' in program.description -%}
+  {%- set title_style = '<span style="background-color: white; color: #1FA4D7;"><b>' ~ program.title ~ ' ✈️</b></span>' -%}
+{%- elif 'PGA' in program.title or 'PGA' in program.description -%}
+  {%- set title_style = '<span style="background-color: white; color: #33FBFF;"><b>' ~ program.title ~ '</b></span>' -%}
+{%- elif 'Ladies' in program.title or 'Ladies' in program.description -%}
+  {%- set title_style = '<span style="background-color: white; color: #FF69B4;"><b>' ~ program.title ~ '</b></span>' -%}
+{%- elif 'European Tour' in program.title or 'European Tour' in program.description -%}
+  {%- set title_style = '<span style="background-color: white; color: green;"><b>' ~ program.title ~ '</b></span>' -%}
+{%- else -%}
+  {%- set title_style = '<span style="background-color: white;"><b>' ~ program.title ~ '</b></span>' -%}
+{%- endif -%}
 
         {# Controleer of de namen in de omschrijving staan en pas de kleuren aan #}
         {%- set description = program.description -%}
+{%- if is_preview -%}
+  {%- set live_programs.preview_shown = true -%}
+{%- endif -%}
 {%- if description | length > 100 -%}
   {%- set description = description[:100] ~ '...' -%}
 {%- endif -%}
@@ -37,14 +52,14 @@
         {%- set dag = '<b>morgen</b>: ' -%}
         {%- set tag = '<i>' -%}
 {%- elif is_yesterday -%}
-        {%- set dag = '<b>gisteren</b>: <s>' -%}
-        {%- set tag = '<s>' -%}
+        {%- set dag = '<b>gisteren</b>: ' -%}
+        {%- set tag = '<i>' if (now() | as_timestamp) < (program.dateEnd | as_timestamp) else '<s>' -%}
 {%- else -%}
         {%- set dag = '' -%}
         {%- set tag = '<i>' -%}
 {%- endif -%}
 
-{%- set program_info = dag ~ start_time ~ '-' ~ end_time ~ ':<br />' ~ title_style ~ '<br />' ~ tag ~ description ~ '</i></s>' -%}
+{%- set program_info = dag ~ tag ~ start_time ~ '-' ~ end_time ~ ':<br />' ~ title_style ~ '<br />' ~ tag ~ description ~ (tag | replace('<','</')) -%}
         
         {# Controleer of we een nieuwe zender tegenkomen #}
         {%- if channel != live_programs.current_channel -%}
